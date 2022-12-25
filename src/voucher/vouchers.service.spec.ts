@@ -60,6 +60,7 @@ const mockedPrismaService = {
     findMany: jest.fn(),
     findUnique: jest.fn(),
     update: jest.fn(),
+    updateMany: jest.fn(),
     create: jest.fn(),
   },
 };
@@ -333,8 +334,11 @@ describe('VoucherService', () => {
         createdAt: '2022-12-25T04:36:11.223Z',
         updateAt: '2022-12-25T04:36:11.223Z',
       };
-      prisma.voucherCode.findUnique = jest.fn().mockReturnValue(codes[0]);
-      prisma.voucherCode.update = jest.fn().mockReturnValue(expectedResult);
+      prisma.voucherCode.findUnique = jest
+        .fn()
+        .mockReturnValueOnce(codes[0])
+        .mockReturnValue(expectedResult);
+      prisma.voucherCode.updateMany = jest.fn().mockReturnValue({ count: 1 });
 
       const result = await service.useCode(codes[0].id);
       expect(result).toStrictEqual(expectedResult);

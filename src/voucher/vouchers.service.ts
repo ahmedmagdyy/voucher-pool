@@ -131,15 +131,23 @@ export class VouchersService {
       throw new HttpException('code expired!', HttpStatus.BAD_REQUEST);
     }
 
-    return this.prismaService.voucherCode.update({
+    const updatedCode = await this.prismaService.voucherCode.updateMany({
       where: {
         id,
+        version: codeExists.version,
       },
       data: {
-        version: 1,
+        version: {
+          increment: 1,
+        },
         redeemedAt: new Date(),
       },
     });
+
+    if (updatedCode.count === 0) {
+      throw new HttpException('code has been used!', HttpStatus.BAD_REQUEST);
+    }
+    return this.findOne(id);
   }
 
   private generateVoucherCode(length: number, count: number): string[] {
