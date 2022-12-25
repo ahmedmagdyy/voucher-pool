@@ -43,8 +43,13 @@ export class VouchersService {
   }
 
   async createMany(createManyVoucherData: ICreateManyVoucher) {
-    const { customerId, codeLength, count, discountPercentage, expiresAt } =
-      createManyVoucherData;
+    const {
+      customerId,
+      codeLength,
+      discountPercentage,
+      expiresAt,
+      count = 1,
+    } = createManyVoucherData;
     const customerExists = await this.customerService.findOne(customerId);
     if (!customerExists) {
       throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);

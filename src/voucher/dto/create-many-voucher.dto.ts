@@ -8,7 +8,7 @@ export class CreateManyVoucherDto {
 
   @ApiProperty()
   @IsNumber()
-  count = 1;
+  count: number;
 
   @ApiProperty()
   @IsNumber()
