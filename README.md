@@ -32,9 +32,9 @@
 $ npm install
 ```
 ## Prerequesite
-Make sure you have [postgresql](https://www.postgresql.org/) installed locally, or you can install it using docker:
+Make sure you have [postgresql](https://www.postgresql.org/) installed locally, or you can install it using [docker](https://www.docker.com/):
 ```bash
-$ > docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=YOUR_PASSWORD postgres
+$ docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=YOUR_PASSWORD postgres
 ```
 
 ## Database Migrations & client generation
@@ -57,7 +57,22 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Swagger API Documentation
+
+To view Swagger API Documentation, after running the server:
+http://localhost:3000/api-doc
 ## Test
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
 
 ```bash
 # unit tests
