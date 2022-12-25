@@ -72,7 +72,7 @@ export class VouchersService {
       data: {
         code,
         discountPercentage,
-        expiresAt,
+        expiresAt: new Date(expiresAt).toISOString(),
         customer: {
           connect: {
             id: customerId,
@@ -126,6 +126,10 @@ export class VouchersService {
 
     if (codeExists.version > 0) {
       throw new HttpException('code limit reached!', HttpStatus.BAD_REQUEST);
+    }
+
+    if (new Date() > codeExists.expiresAt) {
+      throw new HttpException('code expired!', HttpStatus.BAD_REQUEST);
     }
 
     return this.prismaService.voucherCode.update({
