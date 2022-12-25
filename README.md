@@ -37,6 +37,9 @@ Make sure you have [postgresql](https://www.postgresql.org/) installed locally, 
 $ docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=YOUR_PASSWORD postgres
 ```
 
+## env file
+Create your .env file based on .env.example file.
+
 ## Database Migrations & client generation
 
 ```bash
