@@ -31,6 +31,18 @@
 ```bash
 $ npm install
 ```
+## Prerequesite
+Make sure you have [postgresql](https://www.postgresql.org/) installed locally, or you can install it using docker:
+```bash
+$ > docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=YOUR_PASSWORD postgres
+```
+
+## Database Migrations & client generation
+
+```bash
+$ npm run prisma:migrate
+$ npm run prisma:generate
+```
 
 ## Running the app
 
