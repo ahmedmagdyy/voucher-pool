@@ -10,7 +10,6 @@ async function bootstrap() {
     .setTitle('Voucher Pool')
     .setDescription('Api to create and redeem voucher codes.')
     .setVersion('1.0')
-    .addTag('voucher')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);
