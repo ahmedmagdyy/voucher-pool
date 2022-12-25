@@ -5,11 +5,11 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { generate } from 'voucher-code-generator';
 import { PrismaService } from '../common/services/prisma.service';
 import { CustomersService } from '../customers/customers.service';
-import { CreateManyVoucherDto } from './dto/create-many-voucher.dto';
+import { ICreateVoucher } from './interfaces/create-voucher.interface';
+import { ICreateManyVoucher } from './interfaces/create-many-voucher.interface';
 @Injectable()
 export class VouchersService {
   constructor(
@@ -18,8 +18,8 @@ export class VouchersService {
     private readonly customerService: CustomersService,
   ) {}
 
-  async create(createVoucherDto: CreateVoucherDto) {
-    const { code, customerId, discountPercentage } = createVoucherDto;
+  async create(createVoucherData: ICreateVoucher) {
+    const { code, customerId } = createVoucherData;
     const customerExists = await this.customerService.findOne(customerId);
     if (!customerExists) {
       throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);
@@ -39,12 +39,12 @@ export class VouchersService {
       );
     }
 
-    return this.insertVoucher(code, discountPercentage, customerId);
+    return this.insertVoucher(createVoucherData);
   }
 
-  async createMany(createManyVoucherDto: CreateManyVoucherDto) {
-    const { customerId, codeLength, count, discountPercentage } =
-      createManyVoucherDto;
+  async createMany(createManyVoucherData: ICreateManyVoucher) {
+    const { customerId, codeLength, count, discountPercentage, expiresAt } =
+      createManyVoucherData;
     const customerExists = await this.customerService.findOne(customerId);
     if (!customerExists) {
       throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);
@@ -53,22 +53,26 @@ export class VouchersService {
     const generatedCodes = [];
     const codes = this.generateVoucherCode(codeLength, count);
     for (const code of codes) {
-      const createdCode = await this.insertVoucher(
+      const args = {
         code,
         discountPercentage,
         customerId,
-      );
+        expiresAt,
+      };
+      const createdCode = await this.insertVoucher(args);
 
       generatedCodes.push(createdCode);
     }
     return generatedCodes;
   }
 
-  insertVoucher(code: string, discountPercentage: number, customerId: string) {
+  insertVoucher(data: ICreateVoucher) {
+    const { customerId, discountPercentage, expiresAt, code } = data;
     return this.prismaService.voucherCode.create({
       data: {
         code,
         discountPercentage,
+        expiresAt,
         customer: {
           connect: {
             id: customerId,

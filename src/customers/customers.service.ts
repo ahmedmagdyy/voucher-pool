@@ -8,7 +8,7 @@ import {
 import { Customer, Prisma } from '@prisma/client';
 import { VouchersService } from '../voucher/vouchers.service';
 import { PrismaService } from '../common/services/prisma.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
+import { ICreateCustomer } from './interfaces/create-customer.interface';
 
 @Injectable()
 export class CustomersService {
@@ -18,8 +18,8 @@ export class CustomersService {
     private readonly vouchersService: VouchersService,
   ) {}
 
-  async create(createCustomerDto: CreateCustomerDto) {
-    const { email, name } = createCustomerDto;
+  async create(createCustomerData: ICreateCustomer) {
+    const { email, name } = createCustomerData;
     const customerExistsByEmail = await this.findByEmail(email);
     if (customerExistsByEmail) {
       throw new HttpException('email already exists!', HttpStatus.BAD_REQUEST);

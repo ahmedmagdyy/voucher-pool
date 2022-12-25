@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateManyVoucherDto {
   @ApiProperty()
@@ -18,4 +18,8 @@ export class CreateManyVoucherDto {
   @IsString()
   @IsNotEmpty()
   customerId: string;
+
+  @ApiProperty()
+  @IsDateString()
+  expiresAt: string;
 }
