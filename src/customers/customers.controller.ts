@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -25,5 +25,17 @@ export class CustomersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.customersService.findOne(id);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Returns customer working voucher codes.',
+  })
+  @Get(':id/codes')
+  findCustomerVoucherCodes(
+    @Param('id') id: string,
+    @Query('active') active: string,
+  ) {
+    return this.customersService.findCustomerCodes(id, active === 'true');
   }
 }

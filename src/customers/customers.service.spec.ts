@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
+import { VouchersService } from '../voucher/vouchers.service';
 import { PrismaService } from '../common/services/prisma.service';
 import { CustomersService } from './customers.service';
 
@@ -19,6 +20,7 @@ describe('CustomersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CustomersService,
+        VouchersService,
         {
           provide: PrismaService,
           useValue: mockedPrismaService,
