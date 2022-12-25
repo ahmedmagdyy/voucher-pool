@@ -21,6 +21,7 @@ model VoucherCode {
   id                 String    @id @default(uuid())
   code               String
   redeemedAt         DateTime?
+  expiresAt          DateTime
   discountPercentage Float
   customerId         String
   version            Int       @default(0)
