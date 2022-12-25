@@ -20,10 +20,7 @@ export class VouchersService {
 
   async create(createVoucherData: ICreateVoucher) {
     const { code, customerId } = createVoucherData;
-    const customerExists = await this.customerService.findOne(customerId);
-    if (!customerExists) {
-      throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);
-    }
+    await this.customerService.findOne(customerId);
 
     const codeExistsForCustomer =
       await this.prismaService.voucherCode.findFirst({
@@ -50,10 +47,7 @@ export class VouchersService {
       expiresAt,
       count = 1,
     } = createManyVoucherData;
-    const customerExists = await this.customerService.findOne(customerId);
-    if (!customerExists) {
-      throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);
-    }
+    await this.customerService.findOne(customerId);
 
     const generatedCodes = [];
     const codes = this.generateVoucherCode(codeLength, count);
@@ -99,6 +93,9 @@ export class VouchersService {
           ? {
               redeemedAt: null,
               version: 0,
+              expiresAt: {
+                gt: new Date(),
+              },
             }
           : {
               version: {
@@ -125,15 +122,12 @@ export class VouchersService {
 
   async useCode(id: string) {
     const codeExists = await this.findOne(id);
-    if (!codeExists) {
-      throw new HttpException('code not found!', HttpStatus.NOT_FOUND);
-    }
 
     if (codeExists.version > 0) {
       throw new HttpException('code limit reached!', HttpStatus.BAD_REQUEST);
     }
 
-    if (new Date() > codeExists.expiresAt) {
+    if (new Date() > new Date(codeExists.expiresAt)) {
       throw new HttpException('code expired!', HttpStatus.BAD_REQUEST);
     }
 
