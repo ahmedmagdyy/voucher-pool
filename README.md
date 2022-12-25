@@ -27,7 +27,7 @@
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Prerequisite
-Make sure you have [Node](https://nodejs.org/en/) & [postgresql](https://www.postgresql.org/) installed locally.
+Make sure you have [Node](https://nodejs.org/en/) & [PostgreSQL](https://www.postgresql.org/) installed locally.
 To install postgres using [docker](https://www.docker.com/):
 ```bash
 $ docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=YOUR_PASSWORD postgres
