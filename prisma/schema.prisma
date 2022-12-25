@@ -18,12 +18,13 @@ model Customer {
 }
 
 model VoucherCode {
-  id                 String   @id @default(uuid())
+  id                 String    @id @default(uuid())
   code               String
-  redeemedAt         DateTime
+  redeemedAt         DateTime?
   discountPercentage Float
   customerId         String
-  customer           Customer @relation(fields: [customerId], references: [id])
-  createdAt          DateTime @default(now())
-  updateAt           DateTime @default(now())
+  version            Int       @default(0)
+  customer           Customer  @relation(fields: [customerId], references: [id])
+  createdAt          DateTime  @default(now())
+  updateAt           DateTime  @default(now())
 }
