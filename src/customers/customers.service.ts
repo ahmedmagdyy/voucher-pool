@@ -45,6 +45,10 @@ export class CustomersService {
   }
 
   async findCustomerCodes(id: string, active = true) {
+    const customerExists = await this.findOne(id);
+    if (!customerExists) {
+      throw new HttpException('customer not found!', HttpStatus.NOT_FOUND);
+    }
     return this.vouchersService.findAllByCustomerId(id, active);
   }
 
